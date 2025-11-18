@@ -1,0 +1,132 @@
+---
+title: "(5ADK5) BAB II: Penyajian Data Kategorik"
+author: "Andi Oxy Raihan Machikami Rahman"
+format: html
+editor: visual
+---
+
+![](images/Andi Oxy Raihan (1).png)
+
+## Latihan 2.7
+
+Sebuah survei dilakukan pada 90 mahasiswa mengenai **Jurusan x Platform E-Learning Favorit:**
+
+1.  Membuat Tabel Kontigensi di R
+
+    ```{r}
+    platform <- matrix(
+      c(10,20,10,
+        8,12,10,
+        5,10,5),
+      nrow = 3,
+      byrow = TRUE
+    )
+
+    colnames(platform) <- c("Zoom", "Google_Meet", "LMS_Kampus")
+    rownames(platform) <- c("Sistem_Informasi", "Sains_Data", "Statistika")
+
+    platform <- as.table(platform)
+    platform
+    ```
+
+<!-- -->
+
+2.  Hitung Proporsi
+
+    ```{r}
+    prop_joint = prop.table(platform)
+    prop_joint
+    ```
+
+<!-- -->
+
+3.  Hitung Proporsi Marginal untuk Platform
+
+    ```{r}
+    prop_platform = prop.table(platform, margin = 2)
+    prop_platform
+    ```
+
+    ```{r}
+    prop_platform_total <- margin.table(platform, 2) / sum(platform)
+    prop_platform_total
+    ```
+
+<!-- -->
+
+4.  Hitung Proporsi Bersyarat
+
+    ```{r, eval=FALSE}
+    plot(1:10)
+    ```
+
+5.  Grafik Visualisasi
+
+    ```{r}
+    library(ggplot2)
+    library(dplyr)
+    library(tidyr)
+
+    df <- as.data.frame(platform) %>%
+      group_by(Var1) %>%
+      mutate(prop = Freq / sum(Freq))
+
+    ggplot(df, aes(x = Var1, y = prop, fill = Var2)) +
+      geom_bar(stat = "identity", position = "fill") +
+      scale_y_continuous(labels = scales::percent) +
+      labs(
+        x = "Jurusan",
+        y = "Proporsi (%)",
+        title = "Proporsi Penggunaan Platform E-learning per Jurusan (100% Stacked Bar)",
+        fill = "Platform"
+      ) +
+      theme_minimal()
+    ```
+
+6.  Platform mana yang dominan
+
+    Berdasarkan data:
+
+    Sistem Informasi (SI)
+
+    -   Google Meet paling dominan (20/40 = 50%)
+
+    -   Zoom = 25%
+
+    -   LMS Kampus = 25%
+
+    Dominan: Google Meet
+
+    ⸻
+
+    Sains Data (SD)
+
+    -   Google Meet (12/30 = 40%)
+
+    -   Zoom = 26.7%
+
+    -   LMS Kampus = 33.3%
+
+    Dominan: Google Meet meskipun selisih dengan LMS cukup kecil.
+
+    ⸻
+
+    Statistika
+
+    -   Google Meet (10/20 = 50%)
+
+    -   Zoom = 25%
+
+    -   LMS Kampus = 25%
+
+    Dominan: Google Meet
+
+    ⸻
+
+    Kesimpulan Umum:
+
+    -   Google Meet menjadi platform yang paling disukai di semua jurusan.
+
+    -   LMS Kampus memiliki pengguna stabil, tetapi selalu di bawah Google Meet.
+
+    -   Zoom berada di posisi ketiga untuk ketiga jurusan.
