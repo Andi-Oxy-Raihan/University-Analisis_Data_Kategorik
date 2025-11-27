@@ -1,0 +1,140 @@
+---
+title: "(5ADK6) BAB III: Uji Chi Square"
+author: "Andi Oxy Raihan Machikami Rahman"
+format: html
+editor: visual
+---
+
+![](images/Uji Chi-Square.png)
+
+## 3.10 Latihan Soal
+
+1.  Sebuah survei menanyakan minuman favorit dari 120 mahasiswa dengan hasil:
+
+    | Minuman   | Makanan |
+    |-----------|---------|
+    | Teh       | 25      |
+    | Kopi      | 35      |
+    | Susu      | 30      |
+    | Jus       | 30      |
+    | **Total** | **120** |
+
+    Hipotesis nol menyatakan bahwa semua minuman dipilih secara merata. Coba cari
+
+    a\. Hitungan Frekuensi harapan setiap kategori
+
+    -   ***E = n x p,*** **jadi *E = 120 x 25% = 30***
+
+    b\. Hitung nilai Chi-Square secara manual
+
+    -   Rumus Chi-Square:
+
+    | Minuman | Nilai Chi-Square        |
+    |---------|-------------------------|
+    | Teh     | *(25-30)*²*/30 = 0.833* |
+    | Kopi    | *(35-30)*²*/30 = 0,833* |
+    | Susu    | *(30-30)*²*/30 = 0*     |
+    | Jus     | *(30-30)*²*/30 = 0*     |
+
+    Jadi Chi-Square Totalnya adalah: **0,833+0,833+0+0 = 1.666**
+
+    c\. Tentukan df dan bandingkan dengan Chi-Square Tabel (a=0,05)
+
+    -   df = k - 1 = 4 - 1 = **3**
+
+    -   a = 0.05 (5%)
+
+    -   Chi-Square Tabel = **7.815**
+
+    -   **1.666 \< 7.815** = Terima H0
+
+    d\. Lakukan uji di R dengan chisq.test().
+
+    ```{r}
+    observed <- c(25, 35, 30, 30)
+    chisq.test(observed, p = rep(1/4, 4))
+    ```
+
+    e\. Interpretasikan Hasilnya
+
+    -   Terlihat bahwa p-value bernilai 0.6444. Hal ini berarti p-value \> a. Artinya, Terima H0 atau tidak ada perbedaan signifikan antara preferensi minuman
+
+2.  Survei Dilakukan terhadap 60 orang untuk mengetahui hubungan antara Gender x Hobi Membaca.
+
+    | Gender    | Membaca | Tidak Membaca | Total  |
+    |-----------|---------|---------------|--------|
+    | Laki-laki | 18      | 12            | 30     |
+    | Perempuan | 25      | 5             | 30     |
+    | **Total** | **43**  | **17**        | **60** |
+
+    a\. Tentukan hipotesis nol dan alternatif
+
+    -   Hipoptesis:
+
+        -   H0 = Tidak ada hubungan antara Gender X Membaca
+
+        -   H1 = Ada hubungan signifikan antara Gender x Membaca
+
+    b\. Hitung frekuensi harapan (E) tiap sel.
+
+    | Gender    | Membaca | Tidak Membaca |
+    |-----------|---------|---------------|
+    | Laki-laki | 21.5    | 8.5           |
+    | Perempuan | 21.5    | 8.5           |
+
+    c\. Hitung nilai Chi-Square manual
+
+    | Gender        | Status Membaca                       |
+    |---------------|--------------------------------------|
+    | LL Baca       | (18–21.5)²/21.5 = 12.25/21.5 = 0.569 |
+    | LL Tidak Baca | (12–8.5)²/8.5 = 12.25/8.5 = 1.441    |
+    | P Baca        | (25–21.5)²/21.5 = 12.25/21.5 = 0.569 |
+    | P Tidak Baca  | (5–8.5)²/8.5 = 12.25/8.5 = 1.441     |
+    | Total         | 4.02                                 |
+
+    d\. Lakukan uji di R
+
+    ```{r}
+    chisq.test(matrix(c(18,12,25,5), nrow=2, byrow=TRUE), correct = FALSE)
+    ```
+
+    e\. Apa Kesimpulan dari hasil Uji
+
+    -   df = (2-1)(1-2) = 1
+
+    -   Chi-Square Tabel = 3.841
+
+    -   4.01 \> 3.841 = Tolak H0, terima H1
+
+    -   Jadi berdasarkan hasil dari uji tabel dan juga p-value, terlihat bahwa adanya hubungan anatra gender dan juga hobi membaca
+
+3.  Data penelitian kecil tentang Jenis Pelatihan x Kelulusan:
+
+    | Pelatihan | Lulus | Tidak Lulus | Total |
+    |-----------|-------|-------------|-------|
+    | A         | 3     | 1           | 4     |
+    | B         | 1     | 7           | 8     |
+    | Total     | 4     | 8           | 12    |
+
+    a\. Lakukan perhitunagn manual probabilitas (Gunakan rumus kombinasi Sederhana)
+
+    -   *P = (C(4 3) x C(8 1))/C(12 4)*
+
+        -   *C(4 3) = 4*
+
+        -   *C(8 1) = 8*
+
+        -   *C(12 4) = 495*
+
+        -   Jadi *P = (4 x 8)/495 = 0.0646*
+
+    b\. Lakukan uji di R dengan fisher.test()
+
+    ```{r}
+    data <- matrix(c(3,1,1,7), nrow = 2, byrow = TRUE)
+    fisher.test(data)
+    ```
+
+    c\. Apa kesimpulan yang bisa ditarik
+
+    -   Dengan nilai p-value sebesar 0.06667 dan hasil perhitungan manual sebesar 0.064, disimpulkan bahwa HO diterima atau tidak ada bukti signifikan bahwa jenis pelatihan berhubungan dengan kelulusan.
