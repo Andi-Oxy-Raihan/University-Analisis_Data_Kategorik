@@ -1,0 +1,146 @@
+---
+title: "(5ADK7) Ujian Analisis Data Kategorik"
+author: "Andi Oxy Raihan Machikami Rahman"
+format: html
+editor: visual
+---
+
+![](Downloads/Banner.png)
+
+## Ujian Analisis Data Kategorik
+
+1.  Soal 1
+
+    |  Metode   | Lulus | Tidak Lulus | Total |
+    |:---------:|:-----:|:-----------:|:-----:|
+    |  Mandiri  |  28   |     22      |  50   |
+    | Kelompok  |  18   |     12      |  30   |
+    | Bimbingan |  30   |     20      |  50   |
+    |   Total   |  76   |     54      |  130  |
+
+    **a. Tentukan jenis data dari kedua variabel**
+
+    = Data tersebut merupakan data nominal, karena antara metode bimbingan, kelompok, dan mandiri itu bukan merupakan tingkatan dan urutan. Oleh karena itu, data tersebut dikategorikan data nominal
+
+    **b. Analisis apakah ada hubungan antar keduanya**
+
+    = Analisis yang digunakan adalah analisis Chi-Square "Test of Independence"
+
+    ```{r}
+    data <- matrix(c(28,22,
+                     18,12,
+                     30,20),
+                   nrow=3, byrow=TRUE)
+
+    chisq.test(data)
+    ```
+
+    **c. Hitung ukuran asosiasi yang sesuai dean interpretasikan kekuatannya**
+
+    ```{r}
+    library(lsr)
+
+    cramersV(data)
+    ```
+
+    **d. Berikan kesimpulan yang dapat membantu lembaga keputusan**
+
+    = Berdasarkan hasil analisis menggunakan Chi-Square dan hubungan asosisasi Cramer's V, terlihat bahwa p-value menunjukkan nilai 0,9036 yang artinya tidak ada hubungan atau gagal tolak Ho. Dengan ukuran asosiasi yang menunjukkan angka 0,039 yang artinya sangat rendah, bisa terlihat bahwa hampir tidak ada hubungan asosiasi. Oleh karena itu, penting bagi perusahaan untuk lebih memperhatikan faktor lain yang bisa mempengaruhi kelulusan, bukan sebatas metode belajar saja.
+
+2.  Soal 2
+
+    |    Usia     | Sangat Puas | Puas | Cukup | Kurang | Total |
+    |:-----------:|:-----------:|:----:|:-----:|:------:|:-----:|
+    | \<25 Tahun  |     20      |  30  |  25   |   5    |  70   |
+    | 25-40 Tahun |     25      |  35  |  20   |   10   |  90   |
+    | \>40 Tahun  |     10      |  20  |  12   |   8    |  50   |
+    |    Total    |     55      |  85  |  47   |   23   |  210  |
+
+    **a. Klasifikasikan kedua variabel tersebut**
+
+    = Variabel baris dan kolom merupakan data ordinal karena berupa urutan umur dan urutan kepuasan.
+
+    **b. Tentukan metode analisis yang sesuai untuk memeriksa hubungan antar dua variabel dan lakukan perhitungan dengan software**
+
+    = Metode analisis yang digunakan adalah metode Somer's D
+
+    ```{r}
+    data <- matrix(c(
+      20, 30, 25, 5,
+      25, 35, 20, 10,
+      10, 20, 12, 8
+    ),
+    nrow = 3, byrow = TRUE)
+
+    colnames(data) <- c("Sangat_Puas", "Puas", "Cukup", "Kurang")
+    rownames(data) <- c("<25", "25_40", ">40")
+
+    data
+    ```
+
+    ```{r}
+    library(DescTools)
+
+    SomersDelta(data)
+    ```
+
+    **c. Berikan interpretasi arah dan kekuatan hubungan serta rekomendasi**
+
+    = Berdasarkan nilai analisis Somer's D, terlihat bahwa hubungan asosianya positif naik karena berada diatas angka 0. Namun, karena nilainya sangat kecil, maka bisa jadi tidak ada hubungan asosiasi yang kuat dari hubungan antara usia dan tingkat kepuasan. Oleh karena itu, saran bagi perusahaan adalah tidak perlu terlalu memperhitungkan umur dengan cara pelanggn memberikan penilaian.
+
+3.  Soal 3
+
+    | Intensitas Iklan | Membeli | Tidak Membeli | Total |
+    |:----------------:|:-------:|:-------------:|:-----:|
+    |      Tinggi      |   36    |      14       |  50   |
+    |      Sedang      |   24    |      26       |  50   |
+    |      Rendah      |   12    |      28       |  40   |
+    |      Total       |   72    |      68       |  140  |
+
+    **a. Tentukan jenis Data dari kedua variabel tersebut**
+
+    = Untuk kategori intensitas iklan merupakan data ordinal karena terdapat tingkatan pada setiap kategorinya, namun pada membeli dan tidak membeli merupakan data nominal karena tidak memiliki urutan atau tingkatan.
+
+    **b. Tentukan metode analisis yang paling tepat berdasarkan kondisi data**
+
+    = Metode analisis yang digunakan adalah uji Chi-Square dan Cramer's V karena ukuran tabelnya 3x2.
+
+    C. Lakukan Perhitungan Statistik di Software
+
+    ```{r}
+    data <- matrix(c(
+      36, 14,
+      24, 26,
+      12, 28
+    ), 
+    nrow = 3, byrow = TRUE)
+
+    colnames(data) <- c("Membeli", "Tidak_Membeli")
+    rownames(data) <- c("Tinggi", "Sedang", "Rendah")
+    data
+    ```
+
+    ```{r}
+    # Chi Square
+    chisq_result <- chisq.test(data, correct = FALSE)
+    chisq_result
+    ```
+
+    ```{r}
+    chisq_result$expected
+    ```
+
+    ```{r}
+    library(lsr)
+
+    cramer_value <- cramersV(data)
+    cramer_value
+    ```
+
+    **d. Hitung ukuran asosiasi yang sesuai dan jelaskan apakah hubungan bersifat kuat atau lemah, positif atau negatif**
+
+    = Setelah dilakukan uji asosiasi menggunakan Cramers's V, maka dilihat bahwa hasilnya adalah 0,338. Angka ini menunjukkan bahwa terdapat hubungan asosiasi yang belum cukup kuat, namun bisa dikatakan sedang arena mendekati 0.5.
+
+    **e. Berikan interpretasi praktis untuk perusahaan dapat menggunakan informasi ini untuk strategi pemasaran berikutnya.**
+
+    = Terlihat bahwa intensitas iklan berpengaruh terhadap pembelian berdasarkan uji CHi-Square. Serta, adanya hubungan asosiasi yang sedang. Oleh karena itu, untuk meningkatkan penjualan atau kemungkinan pembelian, perusahaan bisa fokus pada pemberian iklan dengan intensitas sedang atau tinggi pada produk-produk yang ingin di iklankan. Sehingga semakin tinggi intensitas paparan iklan, semakin besar peluang untuk membeli produk.
